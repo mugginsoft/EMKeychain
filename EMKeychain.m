@@ -164,7 +164,7 @@ static BOOL _logErrors;
 + (void) setKeychainPassword:(NSString*)password forUsername:(NSString*)username service:(NSString*)serviceName {
 	EMKeychainItem *item = [EMGenericKeychainItem genericKeychainItemForService:serviceName withUsername:username];
 	if (item == nil)
-		item = [EMGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:username password:password];
+		[EMGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:username password:password];
 	else
 		[item setPassword:password];
 }
