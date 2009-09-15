@@ -133,10 +133,11 @@ static BOOL _logErrors;
 	if (returnStatus != noErr || !item) 	{
 		if (_logErrors)
 			NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), GetMacOSStatusErrorString(returnStatus));
-		
+
 		return nil;
 	}
-	NSString *passwordString = [NSString stringWithCString:password length:passwordLength];
+	NSString *passwordString = [NSString stringWithCString:password encoding:NSUTF8StringEncoding];
+
 	SecKeychainItemFreeContent(NULL, password);
 	
 	return [EMGenericKeychainItem genericKeychainItem:item forServiceName:serviceNameString username:usernameString password:passwordString];
@@ -224,7 +225,8 @@ static BOOL _logErrors;
 		
 		return nil;
 	}
-	NSString *passwordString = [NSString stringWithCString:password length:passwordLength];
+	NSString *passwordString = [NSString stringWithCString:password encoding:NSUTF8StringEncoding];
+
 	SecKeychainItemFreeContent(NULL, password);
 	
 	return [EMInternetKeychainItem internetKeychainItem:item forServer:serverString username:usernameString password:passwordString path:pathString port:port protocol:protocol];
@@ -305,10 +307,14 @@ static BOOL _logErrors;
 	myProtocol = newProtocol;
 	[self didChangeValueForKey:@"protocol"];
 	
+	//	need to explictly cast to a void* 
+	void *protocalPointer;
+	memcpy(&protocalPointer, &newProtocol, sizeof newProtocol);
+	
 	SecKeychainAttribute attributes[1];
 	attributes[0].tag = kSecProtocolItemAttr;
 	attributes[0].length = sizeof(newProtocol);
-	attributes[0].data = (void *)newProtocol;
+	attributes[0].data = &protocalPointer;
 	
 	SecKeychainAttributeList list;
 	list.count = 1;
