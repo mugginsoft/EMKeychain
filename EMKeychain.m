@@ -136,7 +136,16 @@ static BOOL _logErrors;
 
 		return nil;
 	}
-	NSString *passwordString = [NSString stringWithCString:password encoding:NSUTF8StringEncoding];
+	
+	char passwordStore[1024];
+	if (passwordLength > 1023) {
+		passwordLength = 1023; // save room for trailing \0
+	}
+	strncpy (passwordStore, password, passwordLength);
+	
+	passwordStore[passwordLength] = '\0';
+	NSString *passwordString = [NSString stringWithUTF8String:passwordStore];
+	NSLog(@"EMKeychain passwordString: %@", passwordString);
 
 	SecKeychainItemFreeContent(NULL, password);
 	
@@ -225,7 +234,17 @@ static BOOL _logErrors;
 		
 		return nil;
 	}
-	NSString *passwordString = [NSString stringWithCString:password encoding:NSUTF8StringEncoding];
+	char passwordStore[1024];
+	if (passwordLength > 1023) {
+		passwordLength = 1023; // save room for trailing \0
+	}
+	strncpy (passwordStore, password, passwordLength);
+	
+	passwordStore[passwordLength] = '\0';
+	NSString *passwordString = [NSString stringWithUTF8String:passwordStore];
+	NSLog(@"EMKeychain passwordString: %@", passwordString);
+	
+	SecKeychainItemFreeContent(NULL, password);
 
 	SecKeychainItemFreeContent(NULL, password);
 	
