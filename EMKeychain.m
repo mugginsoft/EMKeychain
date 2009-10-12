@@ -145,7 +145,6 @@ static BOOL _logErrors;
 	
 	passwordStore[passwordLength] = '\0';
 	NSString *passwordString = [NSString stringWithUTF8String:passwordStore];
-	NSLog(@"EMKeychain passwordString: %@", passwordString);
 
 	SecKeychainItemFreeContent(NULL, password);
 	
@@ -242,7 +241,6 @@ static BOOL _logErrors;
 	
 	passwordStore[passwordLength] = '\0';
 	NSString *passwordString = [NSString stringWithUTF8String:passwordStore];
-	NSLog(@"EMKeychain passwordString: %@", passwordString);
 	
 	SecKeychainItemFreeContent(NULL, password);
 
