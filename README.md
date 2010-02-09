@@ -30,6 +30,7 @@ Thus, this update both simplifies the wrapper for developers, and uses more conv
 		* `+ (void)unlockKeychain;`
 	* Removing
 	    * `+ (void)removeKeychainItem:(EMKeychainItem *)keychainItem;`
+	    * `- (void)remove;`
 	* Getters
 		* `- (NSString *)password;`
 		* `- (NSString *)username;`
