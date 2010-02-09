@@ -1,5 +1,4 @@
-EMKeychain: A Cocoa Keychain Wrapper
-====================================
+# EMKeychain: A Cocoa Keychain Wrapper
 
 By Brian Amerige of Extendmac, LLC., 12/15/2007
 
@@ -20,14 +19,17 @@ The purpose is to merge the EMKeychainProxy class into the EMKeychainItem class 
 Thus, this update both simplifies the wrapper for developers, and uses more conventional Cocoa standards.
 (There are also two new methods for conveniently setting/getting the password of a generic keychain.)
 
-Class Overview
-==============
+[Sam Soffes](http://samsoff.es) has added the ability to remove keychain items.
+
+## Class Overview
 
 * EMKeychainItem
 	* A container object that houses information about your keychain item, and provides modification functionality.
 	* Locking the Keychain:
 		* `+ (void)lockKeychain;`
 		* `+ (void)unlockKeychain;`
+	* Removing
+	    * `+ (void)removeKeychainItem:(EMKeychainItem *)keychainItem;`
 	* Getters
 		* `- (NSString *)password;`
 		* `- (NSString *)username;`
@@ -61,26 +63,33 @@ Class Overview
 				* `- (BOOL)setPort:(int)newPort;`
 				* `- (BOOL)setProtocol:(SecProtocolType)newProtocol;`
 
-Example Usage
-=============
+## Example Usage
 
-Adding a generic keychain item
+### Adding a generic keychain item
 
 	[EMGenericKeychainItem addGenericKeychainItemForService:@"SomeApplicationService" withUsername:@"Joe" password:@"SuperSecure!"];
 
-Adding an internet keychain item
+### Adding an internet keychain item
 
 	[EMInternetKeychainItem addInternetKeychainItemForServer:@"apple.com" withUsername:@"sjobs" password:@"magic" path:@"/httpdocs/" port:21 protocol:kSecProtocolTypeFTP];
 
-* Note that the "protocol" asks for a SecProtocolType. 
+*Note that the `protocol` asks for a `SecProtocolType`.*
 
-Working with a keychain item
+### Working with a keychain item
 
 	EMInternetKeychainItem *keychainItem = [EMInternetKeychainItem internetKeychainItemForServer:@"apple.com" withUsername:@"sjobs" path:@"/httpdocs" port:21 protocol:kSecProtocolTypeFTP];
 
-	//Get the password
+	// Get the password
 	NSString *password = [keychainItem password];
 
-	//Change the password and user
+	// Change the password and user
 	[keychainItem setPassword:@"mynewpass"];
 	[keychainItem setUsername:@"phil"];
+
+### Removing an item
+
+    [[EMGenericKeychainItem genericKeychainItemForService:@"SomeApplicationService" withUsername:@"sam"] remove];
+
+or
+
+    [EMKeychainItem removeKeychainItem:[EMGenericKeychainItem genericKeychainItemForService:@"SomeApplicationService" withUsername:@"sam"]];
