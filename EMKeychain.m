@@ -42,6 +42,10 @@ static BOOL _logErrors;
 	_logErrors = flag;
 }
 
++ (void)removeKeychainItem:(EMKeychainItem *)keychainItem {
+	[keychainItem remove];
+}
+
 - (id)initWithCoreKeychainItem:(SecKeychainItemRef)item username:(NSString *)username password:(NSString *)password {
 	if (self = [super init]) 	{
 		coreKeychainItem = item;
@@ -89,6 +93,9 @@ static BOOL _logErrors;
 	[self didChangeValueForKey:@"label"];
 	
 	return [self modifyAttributeWithTag:kSecLabelItemAttr toBeString:newLabel];
+}
+- (void)remove {
+  	SecKeychainItemDelete(coreKeychainItem);
 }
 - (void)dealloc {
 	if (coreKeychainItem) CFRelease(coreKeychainItem);
