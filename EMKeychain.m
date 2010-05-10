@@ -42,6 +42,10 @@ static BOOL _logErrors;
 	_logErrors = flag;
 }
 
++ (void)removeKeychainItem:(EMKeychainItem *)keychainItem {
+	[keychainItem remove];
+}
+
 - (id)initWithCoreKeychainItem:(SecKeychainItemRef)item username:(NSString *)username password:(NSString *)password {
 	if (self = [super init]) 	{
 		coreKeychainItem = item;
@@ -90,7 +94,11 @@ static BOOL _logErrors;
 	
 	return [self modifyAttributeWithTag:kSecLabelItemAttr toBeString:newLabel];
 }
+- (void)remove {
+  	SecKeychainItemDelete(coreKeychainItem);
+}
 - (void)dealloc {
+	if (coreKeychainItem) CFRelease(coreKeychainItem);
 	[myPassword release];
 	[myUsername release];
 	[myLabel release];
@@ -172,7 +180,7 @@ static BOOL _logErrors;
 + (void) setKeychainPassword:(NSString*)password forUsername:(NSString*)username service:(NSString*)serviceName {
 	EMKeychainItem *item = [EMGenericKeychainItem genericKeychainItemForService:serviceName withUsername:username];
 	if (item == nil)
-		item = [EMGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:username password:password];
+		[EMGenericKeychainItem addGenericKeychainItemForService:serviceName withUsername:username password:password];
 	else
 		[item setPassword:password];
 }
