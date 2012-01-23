@@ -172,7 +172,7 @@ static BOOL _logErrors;
 	
 	if (returnStatus != noErr || !item) {
         CFStringRef errDesc = SecCopyErrorMessageString(returnStatus, NULL);
-		NSLog(@"Error (%@) - %s", NSStringFromSelector(_cmd), errDesc);
+		NSLog(@"Error (%@) - %@", NSStringFromSelector(_cmd), errDesc);
         CFRelease(errDesc);
 		return nil;
 	}
